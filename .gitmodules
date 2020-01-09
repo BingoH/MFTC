@@ -1,0 +1,3 @@
+[submodule "pytorch_simple_classification_baselines"]
+	path = pytorch_simple_classification_baselines
+	url = https://github.com/zzzxxxttt/pytorch_simple_classification_baselines.git

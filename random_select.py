@@ -12,7 +12,7 @@ import argparse
 
 from utils import *
 
-def eval(data_loader, model, top=(1,), device=None, print_freq=10):
+def eval(data_loader, model, topk=(1,), device=None, print_freq=10):
     total = 0
     maxk = max(topk)
     tp = torch.zeros(maxk)
@@ -75,7 +75,7 @@ def random_drop_features(model, ratio=0.5, layers=None):
 
     for name, module in modified_model.named_modules():
         if isinstance(module, nn.Conv2d) and name in layers:
-            print('\tupdate layer: ', name)
+            print('  update layer: ', name)
             idx = random_choice(ratio, module.out_channels)
 
             # TODO: replace usage of .data
@@ -136,7 +136,8 @@ def main(args):
         random.seed(args.seed)
         torch.manual_seed(args.seed)
 
-    device = torch.device('cpu' if args.no_cuda else 'cuda')
+    use_cuda = torch.cuda.is_available() and (not args.no_cuda)
+    device = torch.device('cuda' if use_cuda else 'cpu')
     topk = list(map(int, args.topk.split(',')))
 
     #====  data ====#
@@ -165,8 +166,10 @@ def main(args):
 
     # evaluate
     model = model.to(device)
+    print('Evaluate with original {}'.format(args.arch))
     pre_acc = eval(data_loader, model, device=device, topk=topk)
     model_m = model_m.to(device)
+    print('Evaluate with modified {}'.format(args.arch))
     post_acc = eval(data_loader, model_m, device=device, topk=topk)
 
     print('Accuracy of original {} on {}: {}'.format(args.arch, args.dataset, pre_acc))

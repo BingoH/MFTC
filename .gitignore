@@ -128,5 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# 3rd party
-pytorch_simple_classification_baselines/
+# data
+data/

@@ -16,16 +16,17 @@ def create_dataset(dataset, data_root, is_train):
     if dataset == 'imagenet':
         transform = imgnet_transform(is_training=is_train)
         split = 'train' if is_train else 'val'
-        ret = datasets.ImageNet(root=data_root, split=split, transform=transform)
+        ret = datasets.ImageNet(root=data_root, split=split, download=True, transform=transform)
     elif dataset == 'mnist':
         transform =  minst_transform(is_training=is_train)
-        ret = datasets.MNIST(root=data_root, train=is_train, transform=transform)
+        print(data_root)
+        ret = datasets.MNIST(root=data_root, train=is_train, download=True, transform=transform)
     elif dataset == 'cifar10':
         transform = cifar_transform(is_training=is_train)
-        ret = datasets.CIFAR10(root=data_root, train=is_train, transform=transform)
+        ret = datasets.CIFAR10(root=data_root, train=is_train, download=True, transform=transform)
     elif dataset == 'cifar100':
         transform = cifar_transform(is_training=is_train)
-        ret = datasets.CIFAR100(root=data_root, train=is_train, transform=transform)
+        ret = datasets.CIFAR100(root=data_root, train=is_train, download=True, transform=transform)
     else:
         print('Got dataset: {}, unfortunately not supported yet'.format(dataset))
         return None
